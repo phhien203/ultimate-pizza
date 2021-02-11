@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 // components
 import * as fromComponents from './components';
@@ -11,7 +12,6 @@ import * as fromContainers from './containers';
 
 // services
 import * as fromServices from './services';
-import { HttpClientModule } from '@angular/common/http';
 
 // routes
 export const ROUTES: Routes = [

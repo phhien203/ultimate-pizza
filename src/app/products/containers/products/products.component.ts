@@ -13,7 +13,7 @@ import { PizzasService } from '../../services';
       </div>
       <div class="products__list">
         <div *ngIf="!pizzas?.length">No pizzas, add one to get started.</div>
-        <app-pizza-item *ngFor="let pizza of pizzas" [pizza]="pizza"> </app-pizza-item>
+        <app-pizza-item *ngFor="let pizza of pizzas" [pizza]="pizza"></app-pizza-item>
       </div>
     </div>
   `,

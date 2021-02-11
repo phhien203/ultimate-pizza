@@ -1,6 +1,7 @@
 :host {
   display: block;
 }
+
 .products {
   position: relative;
   &__new {
@@ -14,6 +15,7 @@
   &__list {
     display: flex;
     flex-wrap: wrap;
+
     app-pizza-item {
       background: #fff;
       flex: 0 0 33%;
