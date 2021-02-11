@@ -8,7 +8,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import {
+  RouterStateSerializer,
+  StoreRouterConnectingModule,
+} from '@ngrx/router-store';
+
+import { CustomSerializer, reducers } from './store';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,7 +21,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot(reducers, {}),
     EffectsModule.forRoot([]),
     !environment.production
       ? StoreDevtoolsModule.instrument({
@@ -26,7 +31,12 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
       : [],
     StoreRouterConnectingModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: RouterStateSerializer,
+      useClass: CustomSerializer,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

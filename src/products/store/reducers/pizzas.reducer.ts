@@ -45,5 +45,3 @@ export function reducer(
 ): PizzaState {
   return pizzaReducer(state, action);
 }
-
-// Selector
