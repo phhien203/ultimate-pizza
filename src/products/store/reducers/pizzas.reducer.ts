@@ -18,7 +18,10 @@ export const initialState: PizzaState = {
 // Reducer
 const pizzasReducer = createReducer<PizzaState, Action>(
   initialState,
-  on(fromPizza.loadPizzas, (state: PizzaState) => ({ ...state, loading: true })),
+  on(fromPizza.loadPizzas, (state: PizzaState) => ({
+    ...state,
+    loading: true,
+  })),
   on(fromPizza.loadPizzasFail, (state: PizzaState) => ({
     ...state,
     loading: false,
@@ -39,6 +42,24 @@ const pizzasReducer = createReducer<PizzaState, Action>(
       ...state,
       loading: false,
       loaded: true,
+      entities,
+    };
+  }),
+  on(
+    fromPizza.createPizzaSuccess,
+    fromPizza.updatePizzaSuccess,
+    (state: PizzaState, { payload }) => ({
+      ...state,
+      entities: {
+        ...state.entities,
+        [payload.id]: payload,
+      },
+    })
+  ),
+  on(fromPizza.removePizzaSuccess, (state: PizzaState, { payload }) => {
+    const { [payload.id]: removed, ...entities } = state.entities;
+    return {
+      ...state,
       entities,
     };
   })

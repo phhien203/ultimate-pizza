@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { PizzasService } from '../../services';
 import * as pizzasActions from '../actions';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, exhaustMap, map, switchMap } from 'rxjs/operators';
 import { Pizza } from '../../models/pizza.model';
 import { of } from 'rxjs';
 
@@ -22,6 +22,42 @@ export class PizzasEffects {
           pizzasActions.loadPizzasSuccess({ payload: pizzas })
         ),
         catchError((err) => of(pizzasActions.loadPizzasFail({ payload: err })))
+      )
+    )
+  );
+
+  @Effect()
+  createPizza$ = this.actions$.pipe(
+    ofType(pizzasActions.createPizza),
+    map((action) => action.payload),
+    exhaustMap((payload) =>
+      this.pizzasService.createPizza(payload).pipe(
+        map((pizza) => pizzasActions.createPizzaSuccess({ payload: pizza })),
+        catchError((err) => of(pizzasActions.createPizzaFail({ payload: err })))
+      )
+    )
+  );
+
+  @Effect()
+  updatePizza$ = this.actions$.pipe(
+    ofType(pizzasActions.updatePizza),
+    map((action) => action.payload),
+    exhaustMap((payload) =>
+      this.pizzasService.updatePizza(payload).pipe(
+        map((pizza) => pizzasActions.updatePizzaSuccess({ payload: pizza })),
+        catchError((err) => of(pizzasActions.updatePizzaFail({ payload: err })))
+      )
+    )
+  );
+
+  @Effect()
+  removePizza$ = this.actions$.pipe(
+    ofType(pizzasActions.removePizza),
+    map((action) => action.payload),
+    exhaustMap((payload) =>
+      this.pizzasService.removePizza(payload).pipe(
+        map(() => pizzasActions.removePizzaSuccess({ payload })),
+        catchError((err) => of(pizzasActions.removePizzaFail({ payload: err })))
       )
     )
   );
