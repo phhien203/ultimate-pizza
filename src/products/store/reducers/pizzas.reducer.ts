@@ -1,6 +1,6 @@
 import { Pizza } from '../../models/pizza.model';
 import { Action, createReducer, on } from '@ngrx/store';
-import * as PizzaAction from '../actions/pizzas.action';
+import * as fromPizza from '../actions/pizzas.action';
 
 // State
 export interface PizzaState {
@@ -16,10 +16,15 @@ export const initialState: PizzaState = {
 };
 
 // Reducer
-const pizzaReducer = createReducer<PizzaState, Action>(
+const pizzasReducer = createReducer<PizzaState, Action>(
   initialState,
-  on(PizzaAction.loadPizzas, (state) => ({ ...state, loading: true })),
-  on(PizzaAction.loadPizzasSuccess, (state, { payload }) => {
+  on(fromPizza.loadPizzas, (state: PizzaState) => ({ ...state, loading: true })),
+  on(fromPizza.loadPizzasFail, (state: PizzaState) => ({
+    ...state,
+    loading: false,
+    loaded: false,
+  })),
+  on(fromPizza.loadPizzasSuccess, (state: PizzaState, { payload }) => {
     const entities = payload.reduce(
       (entries: { [id: number]: Pizza }, pizza: Pizza) => {
         return {
@@ -43,5 +48,5 @@ export function reducer(
   state: PizzaState | undefined,
   action: Action
 ): PizzaState {
-  return pizzaReducer(state, action);
+  return pizzasReducer(state, action);
 }

@@ -1,13 +1,10 @@
-import { Component, Inject, InjectionToken, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as fromStore from '../../store';
 import { Pizza } from '../../models/pizza.model';
 import { Topping } from '../../models/topping.model';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-
-export const SELECTED_PIZZA = new InjectionToken<Observable<Pizza>>(
-  'Observable of Pizza from router store'
-);
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-item',
@@ -16,50 +13,38 @@ export const SELECTED_PIZZA = new InjectionToken<Observable<Pizza>>(
     <div class="product-item">
       <app-pizza-form
         [pizza]="pizza$ | async"
-        [toppings]="toppings"
+        [toppings]="toppings$ | async"
         (selected)="onSelect($event)"
         (create)="onCreate($event)"
         (update)="onUpdate($event)"
         (remove)="onRemove($event)"
       >
-        <app-pizza-display [pizza]="visualise"> </app-pizza-display>
+        <app-pizza-display [pizza]="visualise$ | async"> </app-pizza-display>
       </app-pizza-form>
     </div>
   `,
-  providers: [
-    {
-      provide: SELECTED_PIZZA,
-      useFactory: (store: Store<fromStore.ProductsState>) => {
-        return store.select(fromStore.getSelectedPizza);
-      },
-      deps: [Store],
-    },
-  ],
 })
 export class ProductItemComponent implements OnInit {
-  // pizza$: Observable<Pizza>;
-  visualise: Pizza;
-  toppings: Topping[];
+  pizza$: Observable<Pizza>;
+  toppings$: Observable<Topping[]>;
+  visualise$: Observable<Pizza>;
 
-  constructor(
-    @Inject(SELECTED_PIZZA)
-    public readonly pizza$: Observable<Pizza>
-  ) {}
+  constructor(private readonly store: Store<fromStore.ProductsState>) {}
 
   ngOnInit(): void {
-    // this.pizza$ = this.store.select(fromStore.getSelectedPizza);
+    this.pizza$ = this.store.select(fromStore.getSelectedPizza).pipe(
+      tap((pizza: Pizza = null) => {
+        const pizzaExist = !!(pizza && pizza.toppings);
+        const toppings = pizzaExist ? pizza.toppings.map((t) => t.id) : [];
+        this.store.dispatch(fromStore.visualizeToppings({ payload: toppings }));
+      })
+    );
+    this.toppings$ = this.store.select(fromStore.getAllToppings);
+    this.visualise$ = this.store.select(fromStore.getVisualizedPizza);
   }
 
   onSelect(event: number[]): void {
-    // let toppings;
-    // if (this.toppings && this.toppings.length) {
-    //   toppings = event.map((id) =>
-    //     this.toppings.find((topping) => topping.id === id)
-    //   );
-    // } else {
-    //   toppings = this.pizza.toppings;
-    // }
-    // this.visualise = { ...this.pizza, toppings };
+    this.store.dispatch(fromStore.visualizeToppings({ payload: event }));
   }
 
   onCreate(event: Pizza): void {
