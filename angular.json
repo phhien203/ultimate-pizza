@@ -65,7 +65,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ultimate-pizza:build"
+            "browserTarget": "ultimate-pizza:build",
+            "proxyConfig": "src/proxy.config.json"
           },
           "configurations": {
             "production": {
