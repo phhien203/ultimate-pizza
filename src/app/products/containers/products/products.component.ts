@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Pizza } from '../../models/pizza.model';
-import { PizzasService } from '../../services';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as fromPizzas from '../../store';
 
 @Component({
   selector: 'app-products',
@@ -12,20 +14,24 @@ import { PizzasService } from '../../services';
         <a class="btn btn__ok" routerLink="./new"> New Pizza </a>
       </div>
       <div class="products__list">
-        <div *ngIf="!pizzas?.length">No pizzas, add one to get started.</div>
-        <app-pizza-item *ngFor="let pizza of pizzas" [pizza]="pizza"></app-pizza-item>
+        <div *ngIf="!(pizzas$ | async)?.length">
+          No pizzas, add one to get started.
+        </div>
+        <app-pizza-item
+          *ngFor="let pizza of pizzas$ | async"
+          [pizza]="pizza"
+        ></app-pizza-item>
       </div>
     </div>
   `,
 })
 export class ProductsComponent implements OnInit {
-  pizzas: Pizza[];
+  pizzas$: Observable<Pizza[]>;
 
-  constructor(private pizzaService: PizzasService) {}
+  constructor(private readonly store: Store) {}
 
   ngOnInit(): void {
-    this.pizzaService.getPizzas().subscribe((pizzas) => {
-      this.pizzas = pizzas;
-    });
+    this.pizzas$ = this.store.select(fromPizzas.getAllPizzas);
+    this.store.dispatch(fromPizzas.loadPizzas());
   }
 }
