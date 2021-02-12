@@ -1,8 +1,6 @@
 import { createSelector } from '@ngrx/store';
-import * as fromRoot from '../../../app/store';
 import * as fromFeature from '../reducers';
 import * as fromToppings from '../reducers/toppings.reducer';
-import { Topping } from '../../models/topping.model';
 
 export const getToppingsState = createSelector(
   fromFeature.getProductsState,

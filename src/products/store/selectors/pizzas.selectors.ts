@@ -12,7 +12,7 @@ export const getPizzaState = createSelector(
 
 export const getPizzaEntities = createSelector(
   getPizzaState,
-  (state: fromPizzas.PizzaState) => state.entities
+  fromPizzas.getPizzasEntities
 );
 
 export const getSelectedPizza = createSelector(
@@ -39,10 +39,10 @@ export const getAllPizzas = createSelector(getPizzaEntities, (entities) => {
 
 export const getPizzaLoading = createSelector(
   getPizzaState,
-  (state: fromPizzas.PizzaState) => state.loading
+  fromPizzas.getPizzasLoading
 );
 
 export const getPizzaLoaded = createSelector(
   getPizzaState,
-  (state: fromPizzas.PizzaState) => state.loaded
+  fromPizzas.getPizzasLoaded
 );
