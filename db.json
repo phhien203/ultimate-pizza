@@ -131,6 +131,24 @@
         }
       ],
       "id": 3
+    },
+    {
+      "name": "Bill's favorite",
+      "toppings": [
+        {
+          "id": 1,
+          "name": "anchovy"
+        },
+        {
+          "id": 6,
+          "name": "mushroom"
+        },
+        {
+          "id": 11,
+          "name": "sweetcorn"
+        }
+      ],
+      "id": 4
     }
   ]
 }

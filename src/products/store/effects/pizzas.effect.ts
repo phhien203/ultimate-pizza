@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { PizzasService } from '../../services';
+import * as fromRoot from '../../../app/store';
 import * as pizzasActions from '../actions';
 import { catchError, exhaustMap, map, switchMap } from 'rxjs/operators';
 import { Pizza } from '../../models/pizza.model';
@@ -39,6 +40,13 @@ export class PizzasEffects {
   );
 
   @Effect()
+  createPizzaSuccess$ = this.actions$.pipe(
+    ofType(pizzasActions.createPizzaSuccess),
+    map((action) => action.payload),
+    map(({ id }) => fromRoot.navigate({ payload: { path: ['/products', id] } }))
+  );
+
+  @Effect()
   updatePizza$ = this.actions$.pipe(
     ofType(pizzasActions.updatePizza),
     map((action) => action.payload),
@@ -60,5 +68,11 @@ export class PizzasEffects {
         catchError((err) => of(pizzasActions.removePizzaFail({ payload: err })))
       )
     )
+  );
+
+  @Effect()
+  handlePizzaSuccess$ = this.actions$.pipe(
+    ofType(pizzasActions.updatePizzaSuccess, pizzasActions.removePizzaSuccess),
+    map(() => fromRoot.navigate({ payload: { path: ['/products'] } }))
   );
 }

@@ -13,7 +13,7 @@ import {
   StoreRouterConnectingModule,
 } from '@ngrx/router-store';
 
-import { CustomSerializer, reducers } from './store';
+import { CustomSerializer, effects, reducers } from './store';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +22,7 @@ import { CustomSerializer, reducers } from './store';
     BrowserAnimationsModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, {}),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot(effects),
     !environment.production
       ? StoreDevtoolsModule.instrument({
           maxAge: 25,
