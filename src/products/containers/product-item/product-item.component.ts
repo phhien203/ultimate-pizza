@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import * as fromStore from '../../store';
 import { Pizza } from '../../models/pizza.model';
 import { Topping } from '../../models/topping.model';
@@ -9,6 +9,7 @@ import { tap } from 'rxjs/operators';
 @Component({
   selector: 'app-product-item',
   styleUrls: ['product-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="product-item">
       <app-pizza-form

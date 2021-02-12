@@ -1,18 +1,5 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators, } from '@angular/forms';
 
 import { map } from 'rxjs/operators';
 
@@ -22,6 +9,7 @@ import { Topping } from '../../models/topping.model';
 @Component({
   selector: 'app-pizza-form',
   styleUrls: ['pizza-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="pizza-form">
       <form [formGroup]="form">
